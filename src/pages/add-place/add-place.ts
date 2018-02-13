@@ -51,15 +51,15 @@ export class AddPlacePage {
   } */
 
   onLocate() {
-    console.log('onLocate');
+    //console.log('onLocate');
     let loader = this.loadingCtrl.create({
-      content: "Getting current location. Please wait..."
+      content: "Getting your location. Please wait..."
     });
     loader.present();
     // get current position
     this.geolocation.getCurrentPosition()
       .then((location) => {
-        console.log('Current location', location);
+        //console.log('Current location', location);
         loader.dismiss();
         this.location.lat = location.coords.latitude;
         this.location.lng = location.coords.longitude;
@@ -96,9 +96,9 @@ export class AddPlacePage {
     //console.log('onTakePhoto');
     const options: CameraOptions = {
       quality: 100,
-      destinationType: this.camera.DestinationType.DATA_URL,
+      //destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
+      //mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true
     }
 
@@ -108,19 +108,24 @@ export class AddPlacePage {
         // If it's base64:
         //let base64Image = 'data:image/jpeg;base64,' + imageData;
 
-        //otkomentirati nakon deploya na deviceS
-        /*
+        //console.log(err);
+        //this.presentToast(base64Image.toString());
         // image name
         let currentName = imageData.replace(/^.*[\\\/]/, ''); // ostavi samo filename
         let path = imageData.replace(/[^\/]*$/, ''); // ostavi samo path
-        let newFileName = new Date().getUTCMilliseconds() + '.png';
+        let newFileName = new Date().getUTCMilliseconds() + '.jpg';
+        //console.log('currentName', currentName);
+        //console.log('path', path);
+        //console.log('newName', newFileName);
+
         // move file
         this.file.moveFile(path, currentName, cordova.file.dataDirectory, newFileName)
           .then(
             (data: Entry) => {
+              //console.log('data', data);
               this.imageUrl = data.nativeURL; // new path
-              this.camera.cleanup();
-              //his.file.removeFile(path,currentName);
+              this.camera.cleanup(); // clean camera memory
+              //this.file.removeFile(path,currentName);
             }
           )
           .catch(
@@ -133,19 +138,20 @@ export class AddPlacePage {
               this.camera.cleanup();
             }
           );
-          */
+
         this.imageUrl = imageData;
+        //console.log('imageUrl', this.imageUrl);
       }, (err) => {
         // Handle error
         //console.log(err);
-        //this.presentToast(err);
+        this.presentToast('Could not take the image. Please try again.');
         // otkomentirati nakon deploya na device
-        this.imageUrl = this.imageUrlTest;
+        //this.imageUrl = this.imageUrlTest;
       });
   }
 
   onSubmit(form: NgForm) {
-    console.log('onSubmit', form.value);
+    //console.log('onSubmit', form.value);
     // submit form
     this.placesService
       .addPlace(form.value.title, form.value.description, this.location, this.imageUrl);

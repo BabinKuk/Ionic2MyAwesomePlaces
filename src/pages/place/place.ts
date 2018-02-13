@@ -32,12 +32,12 @@ export class PlacePage {
   } */
 
   onLeave() {
-    console.log('leave');
+    //console.log('leave');
     this.viewCtrl.dismiss();
   }
 
   onDelete() {
-    console.log('delete');
+    //console.log('delete');
     this.placesService.deletePlace(this.index);
     this.onLeave();
   }

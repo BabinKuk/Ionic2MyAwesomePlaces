@@ -33,12 +33,21 @@ export class HomePage implements OnInit{
   }
 
   onOpenPlace(place: Place, index: number) {
-    console.log('open place details', place);
+    //console.log('open place details', place);
+    // pass data into modal
     let modal = this.modalCtrl.create(PlacePage, {
       place: place,
       index: index
     });
     modal.present();
+
+    // listen when modal is closed
+    modal.onDidDismiss(
+      () => {
+        // call service and load places array
+        this.places = this.placesService.loadPlaces();
+      }
+    );
   }
 
 }
