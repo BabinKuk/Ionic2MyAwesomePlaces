@@ -104,6 +104,7 @@ export class AddPlacePage {
 
     this.camera.getPicture(options)
       .then((imageData) => {
+        /*
         // imageData is either a base64 encoded string or a file URI
         // If it's base64:
         //let base64Image = 'data:image/jpeg;base64,' + imageData;
@@ -126,6 +127,8 @@ export class AddPlacePage {
               this.imageUrl = data.nativeURL; // new path
               this.camera.cleanup(); // clean camera memory
               //this.file.removeFile(path,currentName);
+
+              this.presentToast('Image');
             }
           )
           .catch(
@@ -138,15 +141,15 @@ export class AddPlacePage {
               this.camera.cleanup();
             }
           );
-
+          */
         this.imageUrl = imageData;
-        //console.log('imageUrl', this.imageUrl);
+        console.log('imageUrl');
       }, (err) => {
         // Handle error
         //console.log(err);
         this.presentToast('Could not take the image. Please try again.');
         // otkomentirati nakon deploya na device
-        //this.imageUrl = this.imageUrlTest;
+        this.imageUrl = this.imageUrlTest;
       });
   }
 
@@ -154,7 +157,20 @@ export class AddPlacePage {
     //console.log('onSubmit', form.value);
     // submit form
     this.placesService
-      .addPlace(form.value.title, form.value.description, this.location, this.imageUrl);
+      .addPlace(form.value.title, form.value.description, this.location, this.imageUrl)
+        .then(
+          () => {
+            //console.log('submit ok');
+            this.presentToast('New place added successfully. Return to Home page');
+          }
+        )
+        .catch(
+          err => {
+            // Handle error
+            //console.log('submit error', err);
+            this.presentToast('Could not add the place. Please try again.');
+          }
+        );
 
     // reset form
     form.reset();

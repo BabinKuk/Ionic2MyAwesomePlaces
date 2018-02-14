@@ -18,15 +18,18 @@ export class PlacesService {
   addPlace(title: string,
            description: string,
            location: Location,
-           imageUrl: string) {
+           imageUrl: string): Promise<any> {
     //console.log('add place ', title, description, location, imageUrl);
     // create new place object and push to array
     let place = new Place(title, description, location, imageUrl);
     this.places.push(place);
 
+    //test error handling
+    //return Promise.reject(new Error('fail'));
+
     // otkomentirati nakon deploya na device
     // set a key/value
-    this.storage.set('places', this.places)
+    return this.storage.set('places', this.places)
       .then(
         // do nothing
       )
@@ -77,13 +80,14 @@ export class PlacesService {
       )
       .catch(
         err => {
-          console.log(err);
+          console.log('err removing file');
         }
       );
   }
 
   private removeFile(place: Place) {
     //console.log('remove file');
+
     let currentName = place.imageUrl.replace(/^.*[\\\/]/, ''); // ostavi samo filename
     this.file.removeFile(cordova.file.dataDirectory, currentName)
       .then(
